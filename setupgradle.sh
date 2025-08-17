@@ -69,13 +69,13 @@ else
 fi
 
 # Create a basic .bashrc addition for environment variables
-cat > gradle_env.sh << 'EOF'
+cat > gradle_env.sh << EOF
 # Gradle environment variables
-export JAVA_HOME=/home/charles-chang/finalrecking/prebuilts/jdk/jdk17/linux-x86
-export PATH=$JAVA_HOME/bin:$PATH
-export ANDROID_HOME=/home/charles-chang/Android/Sdk
-export ANDROID_SDK_ROOT=$ANDROID_HOME
-export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
+export JAVA_HOME=$JAVA_HOME
+export PATH=\$JAVA_HOME/bin:\$PATH
+export ANDROID_HOME=$ANDROID_HOME
+export ANDROID_SDK_ROOT=\$ANDROID_HOME
+export PATH=\$ANDROID_HOME/tools:\$ANDROID_HOME/tools/bin:\$ANDROID_HOME/platform-tools:\$PATH
 EOF
 
 echo "=== Setup Complete ==="
