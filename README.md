@@ -15,6 +15,7 @@ This project demonstrates:
 ```
 hellogradlew/
 ├── setupgradle.sh          # Main setup script
+├── fix-android-project.sh  # Android project diagnostic and fix tool
 ├── build.gradle           # Root build configuration
 ├── settings.gradle        # Project settings
 ├── gradle.properties      # Gradle properties
@@ -61,11 +62,47 @@ These paths are configured based on your existing working Android build environm
 
 ## Using with Existing Android Projects
 
-The `setupgradle.sh` script is designed to be portable. To use it with other Android projects:
+The scripts are designed to be portable. To use them with other Android projects:
 
-1. Copy `setupgradle.sh` to your Android project's root directory
-2. Run `./setupgradle.sh`
-3. Use `source gradle_env.sh && ./gradlew <task>` to build
+1. **Copy scripts** to your Android project's root directory:
+   ```bash
+   cp setupgradle.sh /path/to/your/project/
+   cp fix-android-project.sh /path/to/your/project/
+   ```
+
+2. **Fix project structure** (if needed):
+   ```bash
+   ./fix-android-project.sh
+   ```
+
+3. **Setup Gradle environment**:
+   ```bash
+   ./setupgradle.sh
+   ```
+
+4. **Build the project**:
+   ```bash
+   source gradle_env.sh && ./gradlew <task>
+   ```
+
+### Android Project Fix Tool
+
+The `fix-android-project.sh` script automatically diagnoses and fixes common Android project issues:
+
+- **Missing root `build.gradle`** - Creates with proper Android plugin configuration
+- **Missing `settings.gradle`** - Creates with plugin management and repositories
+- **Missing `gradle.properties`** - Creates with Android project defaults
+- **Plugin compatibility issues** - Validates app/build.gradle plugin syntax
+- **Environment validation** - Checks for gradle_env.sh and gradlew
+
+**Common use case:** Fix the error "Plugin [id: 'com.android.application'] was not found"
+
+```bash
+cd /path/to/broken/android/project
+./fix-android-project.sh    # Fixes missing configuration files
+./setupgradle.sh           # Sets up Gradle wrapper and environment
+source gradle_env.sh && ./gradlew tasks  # Test the setup
+```
 
 ## Available Gradle Tasks
 
@@ -118,18 +155,39 @@ Successful builds will generate:
 
 If you encounter build issues:
 
-1. **Check Java and Android SDK paths** in `setupgradle.sh`
-2. **Verify environment setup:**
+1. **Run the fix script first:**
+   ```bash
+   ./fix-android-project.sh
+   ```
+
+2. **Check Java and Android SDK paths** in `setupgradle.sh`
+
+3. **Verify environment setup:**
    ```bash
    source gradle_env.sh
    echo $JAVA_HOME
    echo $ANDROID_HOME
    java -version
    ```
-3. **Clean and rebuild:**
+
+4. **Clean and rebuild:**
    ```bash
    source gradle_env.sh && ./gradlew clean build
    ```
+
+### Common Issues and Solutions
+
+- **"Plugin [id: 'com.android.application'] was not found"**
+  → Run `./fix-android-project.sh` to create missing root configuration files
+
+- **"gradlew: command not found"**
+  → Run `./setupgradle.sh` to download Gradle wrapper
+
+- **"JAVA_HOME is not set"**
+  → Run `source gradle_env.sh` before using gradlew
+
+- **Build fails with dependency resolution errors**
+  → Check that `google()` and `mavenCentral()` repositories are configured in build.gradle
 
 ## License
 
