@@ -7,7 +7,7 @@ A simple Android project with an automated Gradle setup script for easy environm
 This project demonstrates:
 - Automated Gradle Wrapper download and configuration
 - Environment setup for Android builds using existing JDK and Android SDK
-- Simple "Hello World" Android application
+- Simple "Hello World" Android application using Kotlin
 - Portable setup script for use with other Android projects
 
 ## Project Structure
@@ -23,8 +23,8 @@ hellogradlew/
 │   ├── build.gradle       # App module build configuration
 │   └── src/main/
 │       ├── AndroidManifest.xml
-│       ├── java/com/example/hellogradlew/
-│       │   └── MainActivity.java
+│       ├── kotlin/com/example/hellogradlew/
+│       │   └── MainActivity.kt
 │       └── res/
 │           ├── layout/activity_main.xml
 │           └── values/strings.xml
@@ -130,13 +130,13 @@ source gradle_env.sh && ./gradlew clean
 
 ## Generated Files
 
-After running `setupgradle.sh`, these files will be created:
-- `gradlew` - Gradle wrapper script
-- `gradlew.bat` - Gradle wrapper for Windows
-- `gradle/wrapper/` - Gradle wrapper configuration
-- `gradle_env.sh` - Environment variable setup script
-
-These files are excluded from version control via `.gitignore`.
+After running `setupgradle.sh`, these files will be created if they don't exist:
+- `gradlew` - Gradle wrapper script (tracked by git)
+- `gradlew.bat` - Gradle wrapper for Windows (tracked by git)
+- `gradle/` - Gradle wrapper configuration and JAR (ignored by git)
+- `gradle_env.sh` - Environment variable setup script (ignored by git)
+- `debug.keystore` - Debug signing key (ignored by git)
+- `gradle.properties` - Gradle properties, including Kotlin version (ignored by git)
 
 ## Features
 
