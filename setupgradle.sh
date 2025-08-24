@@ -41,7 +41,7 @@ echo "Using Java: $(java -version 2>&1 | head -1)"
 mkdir -p gradle/wrapper
 
 # Download Gradle Wrapper if not present
-if [ ! -f "gradlew" ]; then
+if [ ! -f "gradlew" ] || [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
     echo "Downloading Gradle Wrapper..."
     
     # Create gradle wrapper properties
@@ -68,6 +68,9 @@ else
     echo "Gradle Wrapper already exists"
 fi
 
+# Add kotlin version to gradle.properties
+echo -e "\nkotlin.version=1.9.22" >> gradle.properties
+
 # Create a basic .bashrc addition for environment variables
 cat > gradle_env.sh << EOF
 # Gradle environment variables
@@ -77,6 +80,15 @@ export ANDROID_HOME=$ANDROID_HOME
 export ANDROID_SDK_ROOT=\$ANDROID_HOME
 export PATH=\$ANDROID_HOME/tools:\$ANDROID_HOME/tools/bin:\$ANDROID_HOME/platform-tools:\$PATH
 EOF
+
+# Check for debug.keystore and generate if not present
+if [ ! -f "debug.keystore" ]; then
+    echo "Debug keystore not found. Generating..."
+    keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+    echo "Debug keystore generated."
+else
+    echo "Debug keystore already exists."
+fi
 
 echo "=== Setup Complete ==="
 echo "Environment is ready for Gradle builds"
